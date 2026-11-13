@@ -1,0 +1,3 @@
+- insert:
+    - id: session-del
+      name: dsh-session-del

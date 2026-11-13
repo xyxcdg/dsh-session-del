@@ -1,0 +1,9 @@
+node_modules/
+*.bak
+*.bak-*
+session-trash/
+logs/
+state/
+*.log
+.DS_Store
+Thumbs.db
