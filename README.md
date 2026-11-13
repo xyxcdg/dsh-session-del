@@ -88,16 +88,17 @@ POST /session-del/api/purge          { apply, minAgeDays }
 
 POST 需要请求头 `X-Session-Del: 1`。
 
-### 4. 宿主外 CLI 等价物（不依赖 DSH 运行）
+### 4. 调度式自动清理（可选，宿主外，不依赖 DSH 运行）
 
-```powershell
-C:\Users\33848\.deepseekharness\elevate\Session-Manager.ps1 -Action list
-C:\Users\33848\.deepseekharness\elevate\Session-Manager.ps1 -Action delete -SessionIds <8位前缀>   # 预演
-C:\Users\33848\.deepseekharness\elevate\Session-Manager.ps1 -Action delete -SessionIds <8位前缀> -Apply
-```
+本仓库只包含**插件本体**。如果你还需要「不开 DSH 也能跑」的批处理清理，可用一组同源的
+PowerShell 脚本（自行部署，不随本仓库发布）：
 
-配合每日 04:00 的自动清理任务 `DSH-SessionAutoPurge`（7 天未动才删、置顶/名单受保护、
-单次上限 200、回收区超 30 天真删）。QQ 机器人的会话在另一个根（`sessions-qqbot`），永不被清。
+- `Session-Manager.ps1 -Action list|show|hide|delete [-Apply]`：预演 → 执行，删除同样移到
+  `session-trash`（可恢复）、先备份 `workspace.json`。
+- `session-autopurge.ps1 [-Apply]`：按「会话目录整树 7 天未动」阈值批量清理，配
+  `session-keep.txt` 白名单保护指定会话、单次上限 200、回收区超 30 天真删。
+
+把它注册成每日计划任务即可无人值守。QQ 机器人的会话在另一个根（`sessions-qqbot`），永不被清。
 
 ---
 
